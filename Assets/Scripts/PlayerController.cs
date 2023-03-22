@@ -5,12 +5,16 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     Rigidbody rbPlayer;
+    public Rigidbody RbPlayer { get { return rbPlayer; } }
 
     [SerializeField] float boostMultiplier = 700f;
     [SerializeField] float rotationMultiplier = 100f;
     [SerializeField] float doubleBoostMultiplier = 2.0f;
     [SerializeField] float doubleBoostLerpTime = 1.0f;
+    [SerializeField] float beamMultiplier = 1.0f;
+    [SerializeField] Transform beamOrigin;
 
+    float beamDist = 5.0f;
     const float doubleBoostInterval = 0.2f;
     float lastBoostTime;
 
@@ -22,11 +26,36 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
-        {
-            MainBoost(); 
-        }
+        InputBoost();
+        RotateShip();
+        AbductionBeam();
+    }
 
+    void AbductionBeam()
+    {
+        RaycastHit hit;
+        Ray beamRay = new Ray(beamOrigin.transform.position, -beamOrigin.transform.up);
+
+        if (Input.GetKey(KeyCode.S))
+        {
+            Vector3 stationaryPos = transform.position;
+            
+            Physics.Raycast(beamRay, out hit, beamDist);
+            Debug.DrawRay(beamOrigin.transform.position, -beamOrigin.transform.up * beamDist, Color.red, 0.5f);
+            
+            if(hit.collider.tag == "Cow")
+            {
+                transform.position = stationaryPos;
+
+                Rigidbody rbCow = hit.rigidbody;
+                rbCow.AddRelativeForce(Vector3.up * beamMultiplier * Time.deltaTime, ForceMode.Force);
+            }
+            else { return; }
+        }
+    }
+
+    private void RotateShip()
+    {
         if (Input.GetKey(KeyCode.A))
         {
             RotateShip(rotationMultiplier);
@@ -36,10 +65,17 @@ public class PlayerController : MonoBehaviour
         {
             RotateShip(-rotationMultiplier);
         }
+    }
+
+    private void InputBoost()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            MainBoost();
+        }
         if (Input.GetKeyDown(KeyCode.W))
         {
             float boostInterval = Time.time - lastBoostTime;
-            lastBoostTime = Time.time;
 
             if (boostInterval <= doubleBoostInterval)
             {
@@ -49,17 +85,19 @@ public class PlayerController : MonoBehaviour
             {
                 MainBoost();
             }
+
+            lastBoostTime = Time.time;
         }
     }
 
-    private void RotateShip(float rotation)
+    void RotateShip(float rotation)
     {
         rbPlayer.freezeRotation = true;
         transform.Rotate(Vector3.forward * rotation * Time.deltaTime);
         rbPlayer.freezeRotation = false;
     }
 
-    private void MainBoost()
+    void MainBoost()
     {
         rbPlayer.AddRelativeForce(Vector3.up * boostMultiplier * Time.deltaTime, ForceMode.Force);
     }
