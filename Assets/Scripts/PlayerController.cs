@@ -43,14 +43,18 @@ public class PlayerController : MonoBehaviour
             Physics.Raycast(beamRay, out hit, beamDist);
             Debug.DrawRay(beamOrigin.transform.position, -beamOrigin.transform.up * beamDist, Color.red, 0.5f);
             
-            if(hit.collider.tag == "Cow")
+            if(!hit.collider.CompareTag("Cow")) { return; }
+            else
             {
-                transform.position = stationaryPos;
+                rbPlayer.useGravity = false;
 
                 Rigidbody rbCow = hit.rigidbody;
                 rbCow.AddRelativeForce(Vector3.up * beamMultiplier * Time.deltaTime, ForceMode.Force);
             }
-            else { return; }
+        }
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+            rbPlayer.useGravity = true;
         }
     }
 
