@@ -77,19 +77,15 @@ public class PlayerController : MonoBehaviour
         {
             MainBoost();
         }
-        if (Input.GetKeyDown(KeyCode.W))
+        else if (Input.GetKeyDown(KeyCode.W))
         {
             float boostInterval = Time.time - lastBoostTime;
 
             if (boostInterval <= doubleBoostInterval)
             {
-                DoubleBoost();
+                StartCoroutine("DoubleBoost");
+                Debug.Log("DOUBLE BOOST!");
             }
-            else
-            {
-                MainBoost();
-            }
-
             lastBoostTime = Time.time;
         }
     }
@@ -106,7 +102,7 @@ public class PlayerController : MonoBehaviour
         rbPlayer.AddRelativeForce(Vector3.up * boostMultiplier * Time.deltaTime, ForceMode.Force);
     }
 
-    void DoubleBoost()
+    IEnumerator DoubleBoost()
     {
         
         Vector3 startPos = transform.position;
@@ -116,13 +112,10 @@ public class PlayerController : MonoBehaviour
 
         while (travelPercent < 1.0f) 
         {
-            travelPercent += Time.deltaTime * doubleBoostLerpTime;
             transform.position = Vector3.Lerp(startPos, endPos, travelPercent);
+            travelPercent += doubleBoostLerpTime * Time.deltaTime;
+            yield return null;
         }
-        
-        float boostInterval = Time.time - lastBoostTime;
-        lastBoostTime = Time.time;
-        Debug.Log($"Last boost time: {boostInterval}");
     }
 
 }
