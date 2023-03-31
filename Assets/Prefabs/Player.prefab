@@ -185,8 +185,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5546510417606603458, guid: f6ab6b8954fd27541a5f1909793d6013, type: 3}
+      propertyPath: lengthInSec
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5546510417606603458, guid: f6ab6b8954fd27541a5f1909793d6013, type: 3}
       propertyPath: playOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5546510417606603458, guid: f6ab6b8954fd27541a5f1909793d6013, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 5546510418160202406, guid: f6ab6b8954fd27541a5f1909793d6013, type: 3}
       propertyPath: prewarm
