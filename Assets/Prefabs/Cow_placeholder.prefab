@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 32509412398306911}
   - component: {fileID: 5367410321788119567}
   m_Layer: 0
-  m_Name: Cow
+  m_Name: Cow_placeholder
   m_TagString: Cow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
