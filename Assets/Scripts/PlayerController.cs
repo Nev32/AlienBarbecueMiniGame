@@ -24,17 +24,19 @@ public class PlayerController : MonoBehaviour
     const float doubleBoostInterval = 0.2f;
     float lastBoostTime;
 
+    [SerializeField] float fixTransformInterval = 2.0f;
+
     void Start()
     {
         rbPlayer = GetComponent<Rigidbody>();
     }
 
-    
     void Update()
     {
         InputBoost();
         RotateShip();
         AbductionBeam();
+        FixTransform();
     }
 
     void AbductionBeam()
@@ -105,8 +107,7 @@ public class PlayerController : MonoBehaviour
                 {
                     dashParticles.Play();
                 }
-                StartCoroutine("DoubleBoost");
-                Debug.Log("DOUBLE BOOST!");
+                StartCoroutine(DoubleBoost());
             }
             else
             {
@@ -148,4 +149,32 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void FixTransform()
+    {
+        if (transform.position.z != 0)
+        {
+            FixPosition();
+        }
+        if (transform.rotation.x != 0 || transform.rotation.y != 0)
+        {
+            StartCoroutine(FixRotation());
+        }
+    }
+
+    void FixPosition()
+    {
+        transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+    }
+
+    IEnumerator FixRotation()
+    {
+        float time = 0.0f;
+
+        while (time < 1.0f)
+        {
+            transform.rotation = Quaternion.Lerp(Quaternion.identity, Quaternion.Euler(0, 0, transform.rotation.z), time);
+            time += fixTransformInterval * Time.deltaTime;
+            yield return null;
+        }
+    }
 }
