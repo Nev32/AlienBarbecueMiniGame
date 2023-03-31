@@ -1323,8 +1323,8 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5916661701255734472, guid: 4426c570e37c9284fa5bd916832c9b00, type: 3}
-      propertyPath: doubleBoostMultiplier
-      value: 4
+      propertyPath: doubleBoostLerpTime
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5916661701255734476, guid: 4426c570e37c9284fa5bd916832c9b00, type: 3}
       propertyPath: m_Name

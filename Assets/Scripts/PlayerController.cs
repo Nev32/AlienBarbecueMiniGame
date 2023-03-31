@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Abduction beam strength:")] [SerializeField] float beamMultiplier = 1.0f;
     [Tooltip("Abduction beam distance:")] float beamDist = 5.0f;
     [SerializeField] Transform beamOrigin;
+    [SerializeField] ParticleSystem beamParticles;
 
     const float doubleBoostInterval = 0.2f;
     float lastBoostTime;
@@ -44,18 +45,26 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.S))
         {
             Vector3 stationaryPos = transform.position;
-            
             Physics.Raycast(beamRay, out hit, beamDist);
-            Debug.DrawRay(beamOrigin.transform.position, -beamOrigin.transform.up * beamDist, Color.red, 0.5f);
+            Debug.DrawRay(beamOrigin.transform.position, -beamOrigin.transform.up * beamDist, Color.red, beamDist);
+
+            if (!beamParticles.isPlaying)
+            {
+                beamParticles.Play();
+            }
             
-            if(!hit.collider.CompareTag("Cow")) { return; }
-            else
+            if(hit.collider.CompareTag("Cow"))
             {
                 rbPlayer.useGravity = false;
 
                 Rigidbody rbCow = hit.rigidbody;
                 rbCow.AddRelativeForce(Vector3.up * beamMultiplier * Time.deltaTime, ForceMode.Force);
             }
+            else { return; }
+        }
+        else
+        {
+            beamParticles.Stop();
         }
         if (Input.GetKeyUp(KeyCode.S))
         {
@@ -81,6 +90,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             MainBoost();
+            if (!mainBoostParticles.isPlaying)
+            {
+                mainBoostParticles.Play();
+            }
         }
         else if (Input.GetKeyDown(KeyCode.W))
         {
@@ -88,10 +101,22 @@ public class PlayerController : MonoBehaviour
 
             if (boostInterval <= doubleBoostInterval)
             {
+                if (!dashParticles.isPlaying)
+                {
+                    dashParticles.Play();
+                }
                 StartCoroutine("DoubleBoost");
                 Debug.Log("DOUBLE BOOST!");
             }
+            else
+            {
+                dashParticles.Stop();
+            }
             lastBoostTime = Time.time;
+        }
+        else
+        {
+            mainBoostParticles.Stop();
         }
     }
 
