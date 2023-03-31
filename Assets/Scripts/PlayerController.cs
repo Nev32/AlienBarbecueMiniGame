@@ -7,14 +7,19 @@ public class PlayerController : MonoBehaviour
     Rigidbody rbPlayer;
     public Rigidbody RbPlayer { get { return rbPlayer; } }
 
-    [SerializeField] float boostMultiplier = 700f;
-    [SerializeField] float rotationMultiplier = 100f;
-    [SerializeField] float doubleBoostMultiplier = 2.0f;
-    [SerializeField] float doubleBoostLerpTime = 1.0f;
-    [SerializeField] float beamMultiplier = 1.0f;
+    [Header("Saucer Flying settings:")]
+    [Tooltip("Speed of main boost:")] [SerializeField] float boostMultiplier = 700f;
+    [Tooltip("Speed of turning:")] [SerializeField] float rotationMultiplier = 100f;
+    [Tooltip("Dash distance:")] [SerializeField] float doubleBoostMultiplier = 2.0f;
+    [Tooltip("Dash Speed:")] [SerializeField] float doubleBoostLerpTime = 1.0f;
+    [SerializeField] ParticleSystem mainBoostParticles;
+    [SerializeField] ParticleSystem dashParticles;
+
+    [Header("Saucer Beam settings:")]
+    [Tooltip("Abduction beam strength:")] [SerializeField] float beamMultiplier = 1.0f;
+    [Tooltip("Abduction beam distance:")] float beamDist = 5.0f;
     [SerializeField] Transform beamOrigin;
 
-    float beamDist = 5.0f;
     const float doubleBoostInterval = 0.2f;
     float lastBoostTime;
 
