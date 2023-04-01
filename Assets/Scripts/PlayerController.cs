@@ -48,7 +48,6 @@ public class PlayerController : MonoBehaviour
         {
             Vector3 stationaryPos = transform.position;
             Physics.Raycast(beamRay, out hit, beamDist);
-            Debug.DrawRay(beamOrigin.transform.position, -beamOrigin.transform.up * beamDist, Color.red, beamDist);
 
             if (!beamParticles.isPlaying)
             {
@@ -58,6 +57,7 @@ public class PlayerController : MonoBehaviour
             if(hit.collider.CompareTag("Cow"))
             {
                 rbPlayer.useGravity = false;
+                transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 
                 Rigidbody rbCow = hit.rigidbody;
                 rbCow.AddRelativeForce(Vector3.up * beamMultiplier * Time.deltaTime, ForceMode.Force);
@@ -135,18 +135,19 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator DoubleBoost()
     {
-        
         Vector3 startPos = transform.position;
         Vector3 endPos = startPos + transform.up * doubleBoostMultiplier;
 
-        float travelPercent = 0.0f;
+        rbPlayer.useGravity = false;
 
+        float travelPercent = 0.0f;
         while (travelPercent < 1.0f) 
         {
             transform.position = Vector3.Lerp(startPos, endPos, travelPercent);
             travelPercent += doubleBoostLerpTime * Time.deltaTime;
             yield return null;
         }
+        rbPlayer.useGravity = true;
     }
 
     void FixTransform()

@@ -4,18 +4,19 @@ using UnityEngine;
 
 public class CowController : MonoBehaviour
 {
-    //[SerializeField] ParticleSystem voidParticle;
-    
+    [SerializeField] ParticleSystem voidParticle;
+    [SerializeField] float timeToDestroy = 1.5f;
+    [SerializeField] GameObject cowMesh;
+
     void OnCollisionEnter(Collision collision)
     {
         Rigidbody rbPlayer = collision.rigidbody;
 
         if (collision.collider.tag == "Player")
         {
-            rbPlayer.freezeRotation = true;
-            //Instantiate(voidParticle, transform.position, Quaternion.identity);
-            Destroy(gameObject);
-            rbPlayer.freezeRotation = false;
+            Instantiate(voidParticle, transform.position, Quaternion.identity);
+            cowMesh.SetActive(false);
+            Destroy(gameObject, timeToDestroy);
         }
     }
 }

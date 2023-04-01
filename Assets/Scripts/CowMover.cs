@@ -12,17 +12,34 @@ public class CowMover : MonoBehaviour
     bool isScared = false;
 
     bool isWandering = false;
+    bool isGrounded = false;
 
     [SerializeField] Animator cowAnimator;
     
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
-        ActivateMovement();
+        if (isGrounded)
+        {
+            ActivateMovement();
+        }
+        else
+        {
+            isGrounded = false;
+            cowAnimator.SetBool("isWalking", false);
+            cowAnimator.SetBool("isScared", false);
+            cowAnimator.SetBool("isAbducting", true);
+        }
+    }
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
+        else
+        {
+            isGrounded = false;
+        }
     }
 
     private void ActivateMovement()
@@ -123,17 +140,5 @@ public class CowMover : MonoBehaviour
     {
         Transform child = gameObject.transform.GetChild(0);
         child.transform.rotation = Quaternion.Euler(transform.rotation.x, -135, transform.rotation.z);
-    }
-
-    void RotateWithSlerp()
-    {
-        float time = 0.0f;
-
-        while (time < 1)
-        {
-            Transform child = gameObject.transform.GetChild(0);
-            child.transform.rotation = Quaternion.Slerp(Quaternion.identity, Quaternion.Euler(transform.rotation.x, -135, transform.rotation.z), time);
-            time += Time.deltaTime * rotationSpeed;
-        }
     }
 }

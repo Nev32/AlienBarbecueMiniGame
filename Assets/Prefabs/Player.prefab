@@ -86,6 +86,8 @@ MonoBehaviour:
   beamMultiplier: 600
   beamOrigin: {fileID: 5916661701877819679}
   beamParticles: {fileID: 6506374513292874036}
+  fixTransformInterval: 2
+  cowMover: {fileID: 2214979279820002140, guid: b65fd2ceedd3c1a42b627f5193fb2c1e, type: 3}
 --- !u!1 &5916661701877819678
 GameObject:
   m_ObjectHideFlags: 0
