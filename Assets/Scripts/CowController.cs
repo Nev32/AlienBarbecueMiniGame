@@ -5,7 +5,8 @@ using UnityEngine;
 public class CowController : MonoBehaviour
 {
     [SerializeField] ParticleSystem voidParticle;
-    [SerializeField] float timeToDestroy = 1.5f;
+    [SerializeField] AudioSource vanishingSound;
+    [SerializeField] float timeToDestroy = 3.0f;
     [SerializeField] GameObject cowMesh;
 
     void OnCollisionEnter(Collision collision)
@@ -14,6 +15,10 @@ public class CowController : MonoBehaviour
 
         if (collision.collider.tag == "Player")
         {
+            if (!vanishingSound.isPlaying)
+            {
+                vanishingSound.Play();
+            }
             Instantiate(voidParticle, transform.position, Quaternion.identity);
             cowMesh.SetActive(false);
             Destroy(gameObject, timeToDestroy);

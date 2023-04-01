@@ -5,7 +5,11 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     Rigidbody rbPlayer;
-    public Rigidbody RbPlayer { get { return rbPlayer; } }
+    AudioSource audioSource;
+
+    [Header("Gameplay area settings:")]
+    [Tooltip("Maximum distance on Vector.X")] [SerializeField] float maxHorizontalDistance = 15.0f;
+    [Tooltip("Maximum distance on Vector.X")] [SerializeField] float maxVerticalDistance = 20.0f;
 
     [Header("Saucer Flying settings:")]
     [Tooltip("Speed of main boost:")] [SerializeField] float boostMultiplier = 700f;
@@ -13,22 +17,26 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Dash distance:")] [SerializeField] float doubleBoostMultiplier = 2.0f;
     [Tooltip("Dash Speed:")] [SerializeField] float doubleBoostLerpTime = 1.0f;
     [SerializeField] ParticleSystem mainBoostParticles;
+    [SerializeField] AudioClip mainBoostSound;
     [SerializeField] ParticleSystem dashParticles;
+    [SerializeField] AudioSource dashSound;
 
     [Header("Saucer Beam settings:")]
     [Tooltip("Abduction beam strength:")] [SerializeField] float beamMultiplier = 1.0f;
     [Tooltip("Abduction beam distance:")] float beamDist = 5.0f;
     [SerializeField] Transform beamOrigin;
     [SerializeField] ParticleSystem beamParticles;
+    [SerializeField] AudioSource beamSound;
 
     const float doubleBoostInterval = 0.2f;
     float lastBoostTime;
 
     [SerializeField] float fixTransformInterval = 2.0f;
 
-    void Start()
+    void Awake()
     {
         rbPlayer = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -37,6 +45,7 @@ public class PlayerController : MonoBehaviour
         RotateShip();
         AbductionBeam();
         FixTransform();
+        maxGameplayArea();
     }
 
     void AbductionBeam()
@@ -53,8 +62,13 @@ public class PlayerController : MonoBehaviour
             {
                 beamParticles.Play();
             }
-            
-            if(hit.collider.CompareTag("Cow"))
+            if (!beamSound.isPlaying)
+            {
+                beamSound.Play();
+            }
+
+
+            if (hit.collider.CompareTag("Cow"))
             {
                 rbPlayer.useGravity = false;
                 transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
@@ -67,6 +81,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             beamParticles.Stop();
+            beamSound.Stop();
         }
         if (Input.GetKeyUp(KeyCode.S))
         {
@@ -92,10 +107,6 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             MainBoost();
-            if (!mainBoostParticles.isPlaying)
-            {
-                mainBoostParticles.Play();
-            }
         }
         else if (Input.GetKeyDown(KeyCode.W))
         {
@@ -103,6 +114,10 @@ public class PlayerController : MonoBehaviour
 
             if (boostInterval <= doubleBoostInterval)
             {
+                if (!dashSound.isPlaying)
+                {
+                    dashSound.Play();
+                }
                 if (!dashParticles.isPlaying)
                 {
                     dashParticles.Play();
@@ -112,12 +127,14 @@ public class PlayerController : MonoBehaviour
             else
             {
                 dashParticles.Stop();
+                dashSound.Stop();
             }
             lastBoostTime = Time.time;
         }
         else
         {
             mainBoostParticles.Stop();
+            audioSource.Stop();
         }
     }
 
@@ -131,6 +148,15 @@ public class PlayerController : MonoBehaviour
     void MainBoost()
     {
         rbPlayer.AddRelativeForce(Vector3.up * boostMultiplier * Time.deltaTime, ForceMode.Force);
+
+        if (!mainBoostParticles.isPlaying)
+        {
+            mainBoostParticles.Play();
+        }
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(mainBoostSound);
+        }
     }
 
     IEnumerator DoubleBoost()
@@ -175,7 +201,26 @@ public class PlayerController : MonoBehaviour
         {
             transform.rotation = Quaternion.Lerp(Quaternion.identity, Quaternion.Euler(0, 0, transform.rotation.z), time);
             time += fixTransformInterval * Time.deltaTime;
-            yield return null;
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    void maxGameplayArea()
+    {
+        float currentPosX = transform.position.x;
+        float currentPosY = transform.position.y;
+
+        if(currentPosX > maxHorizontalDistance)
+        {
+            transform.position = new Vector3(maxHorizontalDistance, transform.position.y, transform.position.z);
+        }
+        if (currentPosX < -maxHorizontalDistance)
+        {
+            transform.position = new Vector3(-maxHorizontalDistance, transform.position.y, transform.position.z);
+        }
+        if (currentPosY > maxVerticalDistance)
+        {
+            transform.position = new Vector3(transform.position.x, maxVerticalDistance, transform.position.z);
         }
     }
 }
