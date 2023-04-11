@@ -174,8 +174,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21d37eee1b989c142a3efecac1ea48e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHorizontalDistance: 18
-  maxVerticalDistance: 20
+  maxHorizontalDistance: 20
+  maxVerticalDistance: 25
   boostMultiplier: 1000
   rotationMultiplier: 175
   doubleBoostMultiplier: 4

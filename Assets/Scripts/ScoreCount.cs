@@ -5,18 +5,40 @@ using TMPro;
 
 public class ScoreCount : MonoBehaviour
 {
-    public int score;
+    [SerializeField] GameObject winScreen;
+    [SerializeField] GameObject loseScreen;
     [SerializeField] TMP_Text scoreText;
+    [SerializeField] TMP_Text timerText;
+    
+    public int score;
+
+    [SerializeField] public float remainingTime;
+    int startingTime;
+
+    MenuController menuController;
 
     void Start()
     {
-        //scoreText = GetComponent<TMP_Text>();
-        scoreText.text = "Cows grabbed: 0";
+        menuController = FindAnyObjectByType<MenuController>();
+        scoreText.text = "Cownt: 0";
+        timerText.text = remainingTime.ToString();
+    }
+
+    private void Update()
+    {
+        Timer();
     }
 
     public void IncreaseScore(int scoreToIncrease)
     {
         score += scoreToIncrease;
-        scoreText.text = $"Cows grabbed: {score}";
+        scoreText.text = $"Cownt: {score}";
+    }
+
+    public void Timer()
+    {
+        remainingTime -= 1 * Time.deltaTime;
+        int time = Mathf.RoundToInt(remainingTime);
+        timerText.text = time.ToString();
     }
 }

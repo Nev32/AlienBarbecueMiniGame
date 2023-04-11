@@ -5,7 +5,7 @@ using UnityEngine;
 public class CowMover : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 1.5f;
-    [SerializeField] float rotationSpeed = 1f;
+    //[SerializeField] float rotationSpeed = 1f;
 
     bool isWalkingRight = false;
     bool isWalkingLeft = false;
