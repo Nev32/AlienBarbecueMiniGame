@@ -6,21 +6,32 @@ using UnityEngine.Audio;
 
 public class MenuController : MonoBehaviour
 {
+    AudioSource buttonClickAudio;
     public AudioMixer audioMixer;
     public GameObject pauseMenu;
     static bool isPaused = false;
+    public int sceneIndex;
+
+    private void Start()
+    {
+        buttonClickAudio = GetComponent<AudioSource>();
+        sceneIndex = SceneManager.GetActiveScene().buildIndex;
+    }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (isPaused)
+            if (sceneIndex == 1)
             {
-                ResumeGame();
-            }
-            else
-            {
-                PauseGame();
+                if (isPaused)
+                {
+                    ResumeGame();
+                }
+                else
+                {
+                    PauseGame();
+                }
             }
         }
     }
@@ -62,5 +73,10 @@ public class MenuController : MonoBehaviour
     public void SetSfxVolume(float volume)
     {
         audioMixer.SetFloat("sfxvolume", volume);
+    }
+
+    public void PlayButtonClick()
+    {
+        buttonClickAudio.Play();
     }
 }
