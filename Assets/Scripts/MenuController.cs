@@ -20,7 +20,7 @@ public class MenuController : MonoBehaviour
 
     private void Start()
     {
-        ResumeGame();
+        InitializeGame();
     }
 
     private void Update()
@@ -39,6 +39,12 @@ public class MenuController : MonoBehaviour
                 }
             }
         }
+    }
+
+    void InitializeGame()
+    {
+        Time.timeScale = 1f;
+        isPaused = false;
     }
 
     void ResumeGame()
