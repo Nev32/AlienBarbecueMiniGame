@@ -12,10 +12,15 @@ public class MenuController : MonoBehaviour
     static bool isPaused = false;
     public int sceneIndex;
 
-    private void Start()
+    private void Awake()
     {
         buttonClickAudio = GetComponent<AudioSource>();
         sceneIndex = SceneManager.GetActiveScene().buildIndex;
+    }
+
+    private void Start()
+    {
+        ResumeGame();
     }
 
     private void Update()
@@ -52,12 +57,26 @@ public class MenuController : MonoBehaviour
 
     public void PlayGame()
     {
-        SceneManager.LoadScene(1);
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        int nextSceneIndex = currentSceneIndex + 1;
+        if (nextSceneIndex == SceneManager.sceneCountInBuildSettings)
+        {
+            nextSceneIndex = 0;
+        }
+        SceneManager.LoadScene(nextSceneIndex);
+    }
+
+    public void ReloadScene()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneIndex);
+        ResumeGame();
     }
 
     public void BackToMenu()
     {
-        SceneManager.LoadScene(0);
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneIndex - 1);
     }
 
     public void QuitGame()
