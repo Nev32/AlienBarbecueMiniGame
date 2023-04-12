@@ -27,6 +27,16 @@ public class ScoreCount : MonoBehaviour
     private void Update()
     {
         Timer();
+
+        if (score == 10 && remainingTime > 0)
+        {
+            winSequence();
+        }
+
+        if (score < 10 && remainingTime <= 0)
+        {
+            loseSequence();
+        }
     }
 
     public void IncreaseScore(int scoreToIncrease)
@@ -40,5 +50,17 @@ public class ScoreCount : MonoBehaviour
         remainingTime -= 1 * Time.deltaTime;
         int time = Mathf.RoundToInt(remainingTime);
         timerText.text = time.ToString();
+    }
+
+    void winSequence()
+    {
+        winScreen.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+    void loseSequence()
+    {
+        loseScreen.SetActive(true);
+        Time.timeScale = 0f;
     }
 }

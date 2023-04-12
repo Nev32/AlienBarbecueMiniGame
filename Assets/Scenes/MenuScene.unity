@@ -2425,7 +2425,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0.2
-  rotationSpeed: 0.1
   cowAnimator: {fileID: 1665081833}
 --- !u!4 &1498342191
 Transform:
@@ -27197,7 +27196,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0.2
-  rotationSpeed: 0.1
   cowAnimator: {fileID: 1184587883306795973}
 --- !u!33 &7606442908080023010
 MeshFilter:
