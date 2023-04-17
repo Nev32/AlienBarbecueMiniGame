@@ -891,7 +891,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0.2
-  rotationSpeed: 0.1
   cowAnimator: {fileID: 7476547485683533611}
 --- !u!114 &5024378869063016247
 MonoBehaviour:
